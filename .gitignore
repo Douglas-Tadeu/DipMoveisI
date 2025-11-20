@@ -1,0 +1,26 @@
+# Flutter / Dart
+food_travel/.dart_tool/
+food_travel/.packages
+food_travel/.pub/
+food_travel/build/
+food_travel/ios/Flutter/ephemeral/
+food_travel/ios/Pods/
+food_travel/android/.gradle/
+food_travel/android/app/build/
+
+# VS Code / IDEs
+.vscode/
+.idea/
+
+# Node / Backend
+backend/node_modules/
+backend/.env
+
+# Python / Django (se usar)
+backend/__pycache__/
+backend/*.pyc
+backend/env/
+backend/.env
+
+# Logs e arquivos temporários
+*.log

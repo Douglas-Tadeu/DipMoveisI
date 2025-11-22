@@ -23,34 +23,42 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthController auth = AuthController();
 
   Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
+  if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _loading = true);
+  setState(() => _loading = true);
 
-    final resultado = await auth.login(
-      _emailController.text.trim(),
-      _senhaController.text.trim(),
+  final resultado = await auth.login(
+    _emailController.text.trim(),
+    _senhaController.text.trim(),
+  );
+
+  setState(() => _loading = false);
+
+  if (resultado['success'] != true) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(resultado['message'] ?? "Credenciais inválidas")),
     );
-
-    setState(() => _loading = false);
-
-    if (resultado['success'] != true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(resultado['message'] ?? "Credenciais inválidas")),
-      );
-      return;
-    }
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('usuarioId', resultado['user']['id'].toString());
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HomeScreen(service: widget.service),
-      ),
-    );
+    return;
   }
+
+  // salva id do usuário (respeitando o mapeamento do controller)
+  final prefs = await SharedPreferences.getInstance();
+  final user = resultado['user'];
+  if (user != null && user['id'] != null) {
+    await prefs.setString('usuarioId', user['id'].toString());
+  }
+  // se houver token, você pode salvar também:
+  if (resultado['token'] != null) {
+    await prefs.setString('token', resultado['token']);
+  }
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (_) => HomeScreen(service: widget.service),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {

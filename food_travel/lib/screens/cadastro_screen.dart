@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/auth_controller.dart';
 import '../services/food_travel_service.dart';
 import 'home_screen.dart';
@@ -22,37 +23,40 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final AuthController auth = AuthController();
 
   Future<void> _cadastrar() async {
-    if (!_formKey.currentState!.validate()) return;
+  if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _loading = true);
+  setState(() => _loading = true);
 
-    final resultado = await auth.register(
-      _nomeController.text.trim(),
-      _emailController.text.trim(),
-      _senhaController.text.trim(),
-    );
+  final resultado = await auth.register(
+    _nomeController.text.trim(),
+    _emailController.text.trim(),
+    _senhaController.text.trim(),
+  );
 
-    setState(() => _loading = false);
+  setState(() => _loading = false);
 
-    if (resultado['success'] != true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(resultado['message'] ?? "Erro ao cadastrar")),
-      );
-      return;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(resultado['message'] ?? "Resposta desconhecida")),
+  );
+
+  if (resultado['success'] == true) {
+    // salva id e token se quiser
+    final prefs = await SharedPreferences.getInstance();
+    final user = resultado['user'];
+    if (user != null && user['id'] != null) {
+      await prefs.setString('usuarioId', user['id'].toString());
+    }
+    if (resultado['token'] != null) {
+      await prefs.setString('token', resultado['token']);
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(resultado['message'] ?? "Conta criada com sucesso!")),
-    );
-
-    // Vai direto para a HomeScreen
+    // vai para a Home (ou você pode voltar para login)
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (_) => HomeScreen(service: widget.service),
-      ),
+      MaterialPageRoute(builder: (_) => HomeScreen(service: widget.service)),
     );
   }
+}
 
   @override
   Widget build(BuildContext context) {

@@ -24,6 +24,7 @@ class _PratoFormScreenState extends State<PratoFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _descricaoController = TextEditingController();
+  final _precoController = TextEditingController();
   final _imageController = TextEditingController();
 
   @override
@@ -32,6 +33,7 @@ class _PratoFormScreenState extends State<PratoFormScreen> {
     if (widget.prato != null) {
       _nomeController.text = widget.prato!.nome;
       _descricaoController.text = widget.prato!.descricao;
+      _precoController.text = widget.prato!.preco.toString();
       _imageController.text = widget.prato!.imageUrl;
     }
   }
@@ -39,18 +41,19 @@ class _PratoFormScreenState extends State<PratoFormScreen> {
   void _salvar() {
     if (!_formKey.currentState!.validate()) return;
 
-    final prato = Prato(
+    final newPrato = Prato(
       id: widget.prato?.id ?? const Uuid().v4(),
+      restauranteId: widget.restaurante.id,
       nome: _nomeController.text,
       descricao: _descricaoController.text,
+      preco: double.tryParse(_precoController.text) ?? 0.0,
       imageUrl: _imageController.text,
-      restauranteId: widget.restaurante.id,
     );
 
     if (widget.prato == null) {
-      widget.service.adicionarPrato(prato);
+      widget.service.adicionarPrato(newPrato);
     } else {
-      widget.service.atualizarPrato(prato);
+      widget.service.atualizarPrato(newPrato);
     }
 
     Navigator.pop(context);
@@ -59,7 +62,9 @@ class _PratoFormScreenState extends State<PratoFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.prato == null ? 'Adicionar Prato' : 'Editar Prato')),
+      appBar: AppBar(
+        title: Text(widget.prato == null ? "Adicionar Prato" : "Editar Prato"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -68,19 +73,31 @@ class _PratoFormScreenState extends State<PratoFormScreen> {
             children: [
               TextFormField(
                 controller: _nomeController,
-                decoration: const InputDecoration(labelText: 'Nome'),
-                validator: (v) => v!.isEmpty ? 'Informe o nome' : null,
+                decoration: const InputDecoration(labelText: "Nome"),
+                validator: (v) => v!.isEmpty ? "Informe o nome" : null,
               ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: _descricaoController,
-                decoration: const InputDecoration(labelText: 'Descrição'),
+                decoration: const InputDecoration(labelText: "Descrição"),
               ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _precoController,
+                decoration: const InputDecoration(labelText: "Preço"),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                validator: (v) => v!.isEmpty ? "Informe o preço" : null,
+              ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: _imageController,
-                decoration: const InputDecoration(labelText: 'URL da imagem'),
+                decoration: const InputDecoration(labelText: "URL da imagem"),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(onPressed: _salvar, child: const Text('Salvar')),
+              ElevatedButton(
+                onPressed: _salvar,
+                child: const Text("Salvar"),
+              ),
             ],
           ),
         ),

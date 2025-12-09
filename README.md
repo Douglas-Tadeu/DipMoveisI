@@ -1,4 +1,4 @@
-💭**A ideia inicial era desenvolver um app em que fosse possivel cadastrar restaurantes e pratos seguindo algumas regras.**
+**A ideia inicial era desenvolver um app em que fosse possivel cadastrar restaurantes e pratos seguindo algumas regras.**
 
 As regras eram: 
 - Os restaurantes poderiam cadastrar seus próprios pratos.
@@ -15,7 +15,7 @@ o meu projeto atual foi simplificado para cadastrar meus pratos favoritos, conte
 Após cadastrar o prato, eu tenho a opção de avaliá-lo.
 O App roda em memoria, sendo assim, caso feche a aba ou abra outra, as informações irão sumir. Esse problema eu deixo para versão 2.0.
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 As principais tecnologias utilizadas neste projeto foram:
 
 - **Dart** / **Flutter**

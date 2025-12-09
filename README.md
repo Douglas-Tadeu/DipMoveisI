@@ -23,19 +23,19 @@ As principais tecnologias utilizadas neste projeto foram:
 - **Git & GitHub**
 - **Node.js**
 
-## 🛠️ Como Executar o Projeto
+## Como Executar o Projeto
 
-### 1️⃣ Clonar o repositório
+### Clonar o repositório
 
-### 2️⃣ Acessar o diretório
+### Acessar o diretório
 - Em um terminal, você utiliza para o servidor: food_travel_server
 - Comando: node server.js
-- Em outro terminal você vair rodar o projeto com os comandos a seguir do passo 3. 
+- Em outro terminal você vair rodar o projeto com os comandos a seguir. 
 
-### 3️⃣ Instalar dependências
+### Instalar dependências
 - Comando: flutter pub get
   
-### 4️⃣ Executar o app
+### Executar o app
 - Comando: flutter run
 
 **Como utilizei o chrome para rodar, o comando foi: flutter run -d chrome**
